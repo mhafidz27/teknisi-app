@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Laporan Mulai Kerja</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#e8176e" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Mulai Kerja" />
+  <link rel="apple-touch-icon" href="icon-512x512.png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.30.0/dist/tabler-icons.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fdf2f6; min-height: 100vh; }
+    .top-bar { background: #e8176e; padding: 20px 16px 28px; border-radius: 0 0 24px 24px; margin-bottom: 20px; }
+    .logo-text { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.7); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .page-title { font-size: 22px; font-weight: 500; color: #fff; }
+    .clock-row { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 16px; }
+    .clock-time { font-size: 32px; font-weight: 500; color: #fff; letter-spacing: -1px; }
+    .clock-right { text-align: right; }
+    .clock-day { font-size: 14px; color: rgba(255,255,255,0.9); }
+    .clock-date { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+    .body { padding: 0 16px 40px; }
+    input[type="text"] { width: 100%; padding: 14px 16px; border: 1.5px solid #fbcfe8; border-radius: 12px; font-size: 16px; color: #111; background: #fff; outline: none; }
+    input[type="text"]:focus { border-color: #e8176e; box-shadow: 0 0 0 3px rgba(232,23,110,0.1); }
+    .search-label { font-size: 13px; color: #be185d; font-weight: 500; margin-bottom: 8px; display: block; }
+    .search-row { display: flex; gap: 8px; margin-bottom: 16px; }
+    .search-row input { margin-bottom: 0; flex: 1; font-size: 22px; letter-spacing: 6px; font-weight: 500; }
+    .btn-search { padding: 14px 18px; background: #e8176e; color: #fff; border: none; border-radius: 12px; font-size: 15px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; white-space: nowrap; flex-shrink: 0; }
+    .btn-search:disabled { opacity: 0.4; }
+    .multiple-results { display: none; margin-bottom: 16px; }
+    .multiple-results.show { display: block; }
+    .multi-label { font-size: 13px; color: #9d174d; margin-bottom: 8px; font-weight: 500; }
+    .result-option { background: #fff; border: 0.5px solid #fbcfe8; border-radius: 12px; padding: 12px 14px; margin-bottom: 8px; cursor: pointer; }
+    .result-option:active { background: #fce7f3; }
+    .result-option-ron { font-size: 13px; font-weight: 500; color: #9d174d; font-family: monospace; }
+    .result-option-sub { font-size: 13px; color: #555; margin-top: 3px; }
+    .ron-result { background: #fff; border: 0.5px solid #fbcfe8; border-radius: 16px; overflow: hidden; margin-bottom: 16px; display: none; }
+    .ron-result.show { display: block; }
+    .ron-result-header { background: #fce7f3; padding: 14px 16px; border-bottom: 0.5px solid #fbcfe8; }
+    .ron-number { font-size: 13px; font-weight: 500; color: #9d174d; font-family: monospace; letter-spacing: 0.5px; }
+    .ron-badge { display: inline-flex; align-items: center; gap: 4px; background: #fbcfe8; color: #9d174d; font-size: 11px; padding: 3px 10px; border-radius: 20px; margin-top: 6px; }
+    .ron-body { padding: 12px 16px; }
+    .ron-row { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 0.5px solid #fce7f3; }
+    .ron-row:last-child { border-bottom: none; }
+    .ron-icon { width: 34px; height: 34px; border-radius: 10px; background: #fce7f3; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .ron-icon i { font-size: 17px; color: #e8176e; }
+    .ron-meta-label { font-size: 11px; color: #9ca3af; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.4px; }
+    .ron-meta-value { font-size: 15px; font-weight: 500; color: #111; }
+    .ron-actions { display: flex; gap: 8px; padding: 12px 16px; border-top: 0.5px solid #fce7f3; background: #fdf2f6; }
+    .btn-confirm { flex: 1; padding: 13px; background: #e8176e; color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .btn-cancel { padding: 13px 16px; background: #fff; border: 1px solid #fbcfe8; border-radius: 10px; font-size: 15px; color: #e8176e; cursor: pointer; }
+    .ron-locked { background: #fce7f3; border: 0.5px solid #fbcfe8; border-radius: 12px; padding: 12px 14px; margin-bottom: 16px; display: none; }
+    .ron-locked.show { display: block; }
+    .ron-locked-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .ron-locked-label { font-size: 11px; color: #be185d; font-weight: 500; text-transform: uppercase; letter-spacing: 0.4px; display: flex; align-items: center; gap: 4px; }
+    .btn-ganti { background: none; border: none; font-size: 12px; color: #be185d; cursor: pointer; text-decoration: underline; }
+    .ron-locked-ron { font-size: 14px; font-weight: 500; color: #9d174d; font-family: monospace; }
+    .ron-locked-sub { font-size: 13px; color: #666; margin-top: 2px; }
+    .btn-mulai { width: 100%; padding: 16px; background: #e8176e; color: #fff; border: none; border-radius: 14px; font-size: 17px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-mulai:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-mulai:active:not(:disabled) { opacity: 0.88; transform: scale(0.98); }
+    .success-box { background: #fce7f3; border: 0.5px solid #fbcfe8; border-radius: 16px; padding: 2rem 1.25rem; text-align: center; display: none; }
+    .success-box i { font-size: 52px; color: #e8176e; margin-bottom: 12px; display: block; }
+    .success-title { font-size: 18px; font-weight: 500; color: #9d174d; margin-bottom: 4px; }
+    .success-sub { font-size: 13px; color: #be185d; margin-bottom: 12px; }
+    .success-badge { display: inline-block; background: #fff; border-radius: 8px; padding: 6px 14px; font-size: 13px; color: #555; border: 0.5px solid #fbcfe8; }
+    .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: #111; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity 0.3s; z-index: 999; white-space: nowrap; }
+    .toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="logo-text"><i class="ti ti-building-store" aria-hidden="true"></i> sejasa.com</div>
+  <div class="page-title">Laporan Mulai Kerja</div>
+  <div class="clock-row">
+    <div class="clock-time" id="current-time">--:--:--</div>
+    <div class="clock-right">
+      <div class="clock-day" id="clock-day">--</div>
+      <div class="clock-date" id="clock-date">--</div>
+    </div>
+  </div>
+</div>
+
+<div class="body">
+  <div id="form-section">
+    <span class="search-label"><i class="ti ti-search" style="font-size:13px" aria-hidden="true"></i> Cari RON (4 angka terakhir)</span>
+    <div class="search-row">
+      <input type="text" id="ron-search" placeholder="0000" maxlength="4" inputmode="numeric" />
+      <button class="btn-search" id="btn-search" onclick="searchRON()"><i class="ti ti-search"></i> Cari</button>
+    </div>
+
+    <div class="multiple-results" id="multiple-results">
+      <p class="multi-label">Ditemukan beberapa hasil, pilih yang sesuai:</p>
+      <div id="result-list"></div>
+    </div>
+
+    <div class="ron-result" id="ron-result">
+      <div class="ron-result-header">
+        <div class="ron-number" id="res-ron">--</div>
+        <span class="ron-badge"><i class="ti ti-check" style="font-size:11px"></i> Ditemukan</span>
+      </div>
+      <div class="ron-body">
+        <div class="ron-row">
+          <div class="ron-icon"><i class="ti ti-user" aria-hidden="true"></i></div>
+          <div><div class="ron-meta-label">Nama customer</div><div class="ron-meta-value" id="res-cust">--</div></div>
+        </div>
+        <div class="ron-row">
+          <div class="ron-icon"><i class="ti ti-tool" aria-hidden="true"></i></div>
+          <div><div class="ron-meta-label">Kategori</div><div class="ron-meta-value" id="res-cat">--</div></div>
+        </div>
+        <div class="ron-row">
+          <div class="ron-icon"><i class="ti ti-hard-hat" aria-hidden="true"></i></div>
+          <div><div class="ron-meta-label">Teknisi</div><div class="ron-meta-value" id="res-sp">--</div></div>
+        </div>
+      </div>
+      <div class="ron-actions">
+        <button class="btn-confirm" onclick="confirmRON()"><i class="ti ti-check" style="font-size:16px;vertical-align:-2px"></i> Ini yang dimaksud</button>
+        <button class="btn-cancel" onclick="resetRON()"><i class="ti ti-x" style="font-size:16px;vertical-align:-2px" aria-hidden="true"></i></button>
+      </div>
+    </div>
+
+    <div class="ron-locked" id="ron-locked">
+      <div class="ron-locked-top">
+        <span class="ron-locked-label"><i class="ti ti-circle-check" style="font-size:12px"></i> RON terkonfirmasi</span>
+        <button class="btn-ganti" onclick="resetRON()">Ganti</button>
+      </div>
+      <div class="ron-locked-ron" id="locked-ron">--</div>
+      <div class="ron-locked-sub" id="locked-sub">--</div>
+    </div>
+
+    <button class="btn-mulai" id="btn-mulai" onclick="handleMulai()">
+      <i class="ti ti-player-play" style="font-size:18px" aria-hidden="true"></i> Mulai Kerja
+    </button>
+  </div>
+
+  <div class="success-box" id="success-box">
+    <i class="ti ti-circle-check"></i>
+    <p class="success-title" id="success-title">Berhasil dicatat!</p>
+    <p class="success-sub" id="success-sub">--</p>
+    <span class="success-badge" id="success-time">--</span>
+    <br>
+    <button class="btn-mulai" style="margin-top:1.25rem;" onclick="resetForm()">
+      <i class="ti ti-plus" aria-hidden="true"></i> Catat job lain
+    </button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  var API_URL = "https://script.google.com/macros/s/AKfycbx1cIHMBLf2sYxmBGuV6K4xRV9QYsYM3c4xCvamSSfeg76Ir0CuJ88LlioT3g-d6K4/exec";
+  var selectedRON = null;
+  var _cbIndex = 0;
+
+  function tick() {
+    var now = new Date();
+    document.getElementById('current-time').textContent = now.toLocaleTimeString('id-ID');
+    document.getElementById('clock-day').textContent = now.toLocaleDateString('id-ID', {weekday:'long'});
+    document.getElementById('clock-date').textContent = now.toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
+  }
+  tick(); setInterval(tick, 1000);
+
+  function showToast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(function() { t.classList.remove('show'); }, 2500);
+  }
+
+  function jsonp(url, callback) {
+    var cbName = '_cb' + (++_cbIndex);
+    window[cbName] = function(data) {
+      delete window[cbName];
+      var el = document.getElementById('_jsonp_' + cbName);
+      if (el) el.remove();
+      callback(data);
+    };
+    var s = document.createElement('script');
+    s.id = '_jsonp_' + cbName;
+    s.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + cbName;
+    s.onerror = function() { delete window[cbName]; s.remove(); callback(null); };
+    document.head.appendChild(s);
+  }
+
+  function searchRON() {
+    var q = document.getElementById('ron-search').value.trim();
+    if (q.length !== 4) { showToast('Masukkan tepat 4 angka!'); return; }
+    var btn = document.getElementById('btn-search');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="ti ti-loader"></i>';
+    document.getElementById('ron-result').classList.remove('show');
+    document.getElementById('multiple-results').classList.remove('show');
+    document.getElementById('ron-locked').classList.remove('show');
+    selectedRON = null;
+
+    jsonp(API_URL + '?action=searchRON&q=' + q, function(data) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="ti ti-search"></i> Cari';
+      if (!data || data.status !== 'ok' || data.results.length === 0) {
+        showToast('RON tidak ditemukan!'); return;
+      }
+      if (data.results.length === 1) {
+        showSingleResult(data.results[0]);
+      } else {
+        showMultipleResults(data.results);
+      }
+    });
+  }
+
+  function showSingleResult(item) {
+    document.getElementById('res-ron').textContent = item.ron;
+    document.getElementById('res-cust').textContent = item.cust_name;
+    document.getElementById('res-cat').textContent = item.category;
+    document.getElementById('res-sp').textContent = item.sp_username || '-';
+    document.getElementById('ron-result').classList.add('show');
+    selectedRON = item;
+  }
+
+  function showMultipleResults(items) {
+    var el = document.getElementById('result-list');
+    el.innerHTML = items.map(function(item, i) {
+      return '<div class="result-option" onclick="pickRON(' + i + ')"><div class="result-option-ron">' + item.ron + '</div><div class="result-option-sub">' + item.cust_name + ' &middot; ' + (item.sp_username || '-') + '</div></div>';
+    }).join('');
+    document.getElementById('multiple-results').classList.add('show');
+    window._ronResults = items;
+  }
+
+  function pickRON(i) {
+    document.getElementById('multiple-results').classList.remove('show');
+    showSingleResult(window._ronResults[i]);
+  }
+
+  function confirmRON() {
+    if (!selectedRON) return;
+    document.getElementById('ron-result').classList.remove('show');
+    document.getElementById('ron-locked').classList.add('show');
+    document.getElementById('locked-ron').textContent = selectedRON.ron;
+    document.getElementById('locked-sub').textContent = selectedRON.cust_name + ' · ' + (selectedRON.sp_username || '-');
+  }
+
+  function resetRON() {
+    selectedRON = null;
+    document.getElementById('ron-result').classList.remove('show');
+    document.getElementById('ron-locked').classList.remove('show');
+    document.getElementById('multiple-results').classList.remove('show');
+    document.getElementById('ron-search').value = '';
+  }
+
+  function handleMulai() {
+    if (!selectedRON) { showToast('Cari dan konfirmasi RON dulu!'); return; }
+    var nama = selectedRON.sp_username || '';
+    if (!nama) { showToast('Nama teknisi tidak ditemukan di database!'); return; }
+    var btn = document.getElementById('btn-mulai');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="ti ti-loader"></i> Menyimpan...';
+    var now = new Date();
+
+    var params = '?action=submitJob'
+      + '&nama=' + encodeURIComponent(nama)
+      + '&ron=' + encodeURIComponent(selectedRON.ron)
+      + '&custName=' + encodeURIComponent(selectedRON.cust_name)
+      + '&category=' + encodeURIComponent(selectedRON.category)
+      + '&timestamp=' + encodeURIComponent(now.toISOString());
+
+    jsonp(API_URL + params, function(data) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="ti ti-player-play" style="font-size:18px"></i> Mulai Kerja';
+      if (data && data.status === 'ok') {
+        var timeStr = now.toLocaleTimeString('id-ID');
+        var dateStr = now.toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+        document.getElementById('form-section').style.display = 'none';
+        document.getElementById('success-box').style.display = 'block';
+        document.getElementById('success-title').textContent = selectedRON.ron;
+        document.getElementById('success-sub').textContent = selectedRON.cust_name + ' · ' + dateStr;
+        document.getElementById('success-time').textContent = '\u23F1 Mulai kerja: ' + timeStr;
+      } else {
+        showToast('Gagal simpan, coba lagi!');
+      }
+    });
+  }
+
+  function resetForm() {
+    document.getElementById('form-section').style.display = 'block';
+    document.getElementById('success-box').style.display = 'none';
+    resetRON();
+    var btn = document.getElementById('btn-mulai');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-player-play" style="font-size:18px"></i> Mulai Kerja';
+  }
+
+  document.getElementById('ron-search').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') searchRON();
+  });
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('sw.js').catch(function(e) { console.log('SW:', e); });
+    });
+  }
+</script>
+</body>
+</html>
